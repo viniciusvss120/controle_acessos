@@ -1,4 +1,5 @@
 import Database from '../database/dbconfig'
+import knex from '../database/knex'
 import bcrypt from "bcrypt"
 
 // const database = new App().database
@@ -24,14 +25,15 @@ class Users {
 
   public async listUser (){
     try {
-      const res = await (await Database.database()).query('SELECT * FROM users')
+      // const res = await (await Database.database()).query('SELECT * FROM users')
+      const res = await knex.select().from('users')
 
       if(!res) {
         console.log("Não foi possível fazer a requisição!")
         return new Error("Não foi possível fazer a requisição!")
       }
 
-      return await res[0]
+      return await res
     } catch (error) {
       console.error(error)
     }

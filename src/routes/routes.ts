@@ -5,13 +5,14 @@ import RolesController from '../controllers/RolesController'
 import PermissionController from '../controllers/PermissionController'
 import Roles_Permissions from '../acessos/Roles_Permissions'
 import Users_Roles from '../acessos/Users_Roles'
+
 const routes = Router()
 
 //Users
 routes.post('/login', UsersController.login)
 routes.get('/',Admin.decoded, UsersController.listeUser)
-routes.post('/create', UsersController.creteUser)
-routes.put('/edituser',Admin.decoded, UsersController.editUser)
+routes.post('/create',Admin.createPermissionsUser, UsersController.creteUser)
+routes.put('/edituser',Admin.editPermissionsUser, UsersController.editUser)
 // routes.post('/store', UserController.create)
 
 //Roles
