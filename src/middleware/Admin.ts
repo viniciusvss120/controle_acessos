@@ -18,7 +18,7 @@ type TokenPayload = {
 }
 class Admin{
 
-  public async decoded(req: Request, res: Response, next: NextFunction){
+  public async list(req: Request, res: Response, next: NextFunction){
     const authToken = req.headers['authorization']
 
     if(authToken !== undefined){
@@ -56,7 +56,7 @@ class Admin{
       console.error("Token não enviado!")
     }
   }
-  public async editPermissionsUser(req: Request, res: Response, next: NextFunction){
+  public async editProdutos(req: Request, res: Response, next: NextFunction){
     
     const authToken = req.headers['authorization']
 
@@ -92,7 +92,7 @@ class Admin{
       }
     }
   } 
-  public async createPermissionsUser(req: Request, res: Response, next: NextFunction){
+  public async createProdutos(req: Request, res: Response, next: NextFunction){
     
     const authToken = req.headers['authorization']
 
@@ -122,6 +122,42 @@ class Admin{
             if(!validate) {
               res.status(401)
               res.json({error: "Usuário sem permissão para criar um novo user."})
+            }else{
+              next()
+            }
+      }
+    }
+  } 
+  public async deleteProdutos(req: Request, res: Response, next: NextFunction){
+    
+    const authToken = req.headers['authorization']
+
+    if(authToken !== undefined){
+      const bearer = authToken.split(' ')
+      const token = bearer[1]
+      const userId = verify(token, secret)
+
+      const {id} = userId as TokenPayload
+
+      if(!userId){
+        res.status(401)
+        res.json({error: "Token invalido"})
+        }else{
+          const user = await knex.select('roles_id').from('users_roles').where({user_id: id})
+            let userId = user.pop()
+            const result = await knex.select().from('permissions_roles').where({roles_id: userId.roles_id})
+            
+            const permissions = result.map(item => item.permissions_id)
+            const idUser = result.find(item => item.roles_id === userId.roles_id).roles_id
+            
+            var params = {
+              user: idUser,
+              permissions
+            }
+            const validate = params.permissions.includes(4)
+            if(!validate) {
+              res.status(401)
+              res.json({error: "Usuário sem permissão para editar users."})
             }else{
               next()
             }
