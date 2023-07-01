@@ -3,7 +3,23 @@ import Produtos from '../services/Produtos'
 class ProdutoController{
   public async listarProdutos(req: Request, res: Response): Promise<Response>{
     try {
-      const produtos = await Produtos.listar()
+      const produtos = await Produtos.listar(req.body)
+
+      if(produtos){
+        res.status(200)
+        res.json(produtos)
+      }else{
+        res.json("Produtos inesitente.")
+      }
+    } catch (error) {
+      res.status(404)
+      res.json({err: error})
+    }
+    return res
+  }
+  public async listByName(req: Request, res: Response): Promise<Response>{
+    try {
+      const produtos = await Produtos.listByname(req.body)
 
       if(produtos){
         res.status(200)

@@ -36,6 +36,7 @@ routes.post('/createusers_role', Users_Roles.addRoles)
 
 //Produtos
 routes.get('/produtos', Admin.list, ProdutosController.listarProdutos)
+routes.get('/produtosbyname', Admin.list, ProdutosController.listByName)
 routes.post('/produtos',Admin.createProdutos, ProdutosController.createProdutos)
 routes.put('/produtos', Admin.editProdutos, ProdutosController.editProdutos)
 routes.delete('/produtos', ProdutosController.deleteProdutos)
