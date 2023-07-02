@@ -16,21 +16,27 @@ class Produtos {
   public async listar(produto: typeProdutos){
     try {
       // const objKey = Object.keys(produto)
-
-      // const newObj = objKey.filter(item => produto[item] !== null)
-      // // console.log(newObj)
-
-      // // Object.assign(objProd, newObj)
-
-      // // for(let item in objProd){
-      // //   Object.assign(objProd, produto[item])
-      // // }
-      // newObj.forEach((item, index) => {
-      //   let objProd: typeProdutos = {
+      // objKey.forEach(item => {
+      //   if(produto[item] === null){
 
       //   }
       // })
-      
+      // const newObj = objKey.filter(item => produto[item] !== null)
+      if(produto.id === null || produto.name === null){
+
+        const result = await (await Database.database()).query(`
+          SELECT * FROM produtos`
+        )
+        return result[0]
+      }else{
+        const result = await (await Database.database()).query(`
+          SELECT * FROM produtos
+          WHERE id = ${produto.id}
+          AND name = '${produto.name}'
+        `)
+        return result[0]
+      }
+
       const result = await (await Database.database()).query(`SELECT * FROM produtos`)
 
       return result[0]
